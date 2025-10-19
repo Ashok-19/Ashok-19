@@ -104,33 +104,8 @@
 </br>
 
 <div align="center" style="font-family: 'Courier New'; padding: 20px;">
-  <h2>PROJECTS</h2>
+  <h2>💻 Check Out My Repos ⬇️ </h2>
 </div>
-
-### FPGA-ZeroDCE_extension
-![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![VitisAI](https://img.shields.io/badge/VitisAI-FF6F00) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?logo=pytorch&logoColor=white)
-
-Work that showcases the porting of low-light image enhancement model ZeroDCE++ from CPU to DPU architecture of Xilinx FPGA board.  
-
-[View Repository](https://github.com/Ashok-19/FPGA-ZeroDCE_extension)
-
----
-
-### NanoDCE
-![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![VitisAI](https://img.shields.io/badge/VitisAI-FF6F00) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?logo=pytorch&logoColor=white)
-
-A lightweight implementation of ZeroDCE++ for efficient image enhancement.  
-
-[View Repository](https://github.com/Ashok-19/ZeroDCE_extension-KD)
-
----
-
-### AgriMarket
-![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black) ![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
-
-A web application to visualize and gather insights of real-time prices and future prices of agricultural commodities.  
-
-[View Repository](https://github.com/Ashok-19/AgriMarket)
 
 
 
