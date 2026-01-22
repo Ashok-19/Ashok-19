@@ -16,19 +16,15 @@
 
 <p>
   <img src="https://media.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif" width="40px" style="vertical-align: middle;"/> 
-  I’m a Student currently working on <b>Computer Vision</b>, <b>Deep Learning</b>, <b>AI Agent Building</b>, and <b>Reinforcement Learning</b> based projects.
+  I work on <b>Computer Vision</b>, <b>Deep Learning</b>, <b>AI Agent Building</b>, and <b>Reinforcement Learning</b> based projects. I actively compete in kaggle competitions.
   
   <br>
-  </br>
 
-  <img src="https://media.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="40px" style="vertical-align: middle;"/> 
-  I’m looking to collaborate on <b>AI Automation</b> and <b>ML Finetuning</b> related works.
-   <br>
   </br>
 
 
   <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="40px" style="vertical-align: middle;"/> 
-  I’m currently learning <b>Web Development</b>.
+  Learning <b>Web Development</b>.
 </p>
 
 </br>
@@ -99,10 +95,6 @@
 
 ![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=gruvbox)</br>
 </br>
-
-<div align="center" style="font-family: 'Courier New'; padding: 20px;">
-  <h2>💻 Check Out My Repos ⬇️ </h2>
-</div>
 
 
 
