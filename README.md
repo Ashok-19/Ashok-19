@@ -86,14 +86,7 @@
   </tr>
 </table>
 
-</br>
-<div align = 'left'>
-    <h2 style="font-family: Courier New;"> GitHub Trophies:
-    </h2>
-</div>
 
-![](https://github-profile-trophy.vercel.app/?username=Ashok-19&theme=gruvbox&no-frame=false&no-bg=false&margin-w=20)
-<br>
 
 <div align = 'left'>
     <h2 style="font-family: Courier New;"> Random Dev Quote:
