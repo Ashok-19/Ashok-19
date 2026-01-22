@@ -42,6 +42,10 @@
   <a href="mailto:ashokraja1910@gmail.com">
     <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white" alt="Email" style="height:40px;" />
   </a>
+   &nbsp;
+  <a href="https://www.kaggle.com/ashok205">
+    <img src="https://img.shields.io/badge/Kaggle-20BEFF?logoColor=white" alt="Kaggle" style="height:40px;" />
+  </a>
 </div>
 </br>
 
