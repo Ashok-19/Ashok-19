@@ -5,6 +5,13 @@
   <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/header-light.svg" alt="Ashok: AI, computer vision and reinforcement learning">
 </picture>
 
+<br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/run-dark.svg">
+  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/run-light.svg" alt="Pixel dino running past Python, PyTorch, OpenCV, Docker, AWS, Git, Linux, Ubuntu, React, MongoDB, MySQL, Firebase and Vercel logos">
+</picture>
+
 </div>
 
 <picture>
@@ -13,20 +20,6 @@
 </picture>
 
 I work on **computer vision**, **deep learning**, **AI agents** and **reinforcement learning**, and I compete in [Kaggle](https://www.kaggle.com/ashok205) competitions. Currently learning **web development**.
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stack-dark.svg">
-  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stack-light.svg" alt="Tech stack">
-</picture>
-
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/stack-dark.svg">
-  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/stack-light.svg" alt="Python, PyTorch, OpenCV, Docker, AWS, Git, Linux, Ubuntu, React, MongoDB, MySQL, Firebase, Vercel">
-</picture>
-
-</div>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stats-dark.svg">

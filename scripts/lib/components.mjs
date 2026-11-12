@@ -3,9 +3,26 @@ import { text, textWidth, grid, loadSprite, placeSprite, svgDoc, fmt } from './p
 const CLOUD = ['....XXXX......', '..XXXXXXXX....', 'XXXXXXXXXXXXXX'];
 
 // ---------------------------------------------------------------- header
-// The dino runs and jumps over the tech-stack logos as they scroll past.
-export function header(cfg, icons, t) {
-  const W = 900, H = 304, GROUND = 272, FLY = 142;
+export function header(cfg, t) {
+  const W = 900, H = 170;
+  const name = text(cfg.name, 0, 0, 10);
+  const tag = text(cfg.tagline, 0, 0, 3);
+  const cx = (w) => Math.round((W - w) / 2);
+  const style = `.c1{animation:cl 30s linear infinite}.c2{animation:cl 42s linear -19s infinite}
+@keyframes cl{from{transform:translateX(${W}px)}to{transform:translateX(-80px)}}`;
+  return svgDoc(W, H, t,
+    `<rect width="${W}" height="${H}" fill="${t.bg}"/>` +
+    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 12)">${grid(CLOUD, 0, 0, 2)}</g></g>` +
+    `<g class="c2"><g transform="translate(0 20)">${grid(CLOUD, 0, 0, 2)}</g></g></g>` +
+    `<g fill="${t.fg}" transform="translate(${cx(name.width)} 40)">${name.svg}</g>` +
+    `<g fill="${t.mid}" transform="translate(${cx(tag.width)} 128)">${tag.svg}</g>`, style);
+}
+
+// ---------------------------------------------------------------- dino run
+// The dino runs and jumps over the tech-stack logos as they scroll past;
+// logos marked 'fly' pass overhead instead.
+export function run(cfg, icons, t) {
+  const W = 900, H = 256, GROUND = 216, FLY = 86;
   const SPEED = 260, GAP = 1.8, AIR = 0.7, APEX = 84, S = 2;
   const run1 = loadSprite('run-1'), run2 = loadSprite('run-2'), jump = loadSprite('jump');
   const dh = 76, dw = (run1.w / run1.h) * dh, dx = 70;
@@ -39,9 +56,6 @@ export function header(cfg, icons, t) {
       (fly ? `<g class="bob" style="animation-delay:-${fmt(i * 0.37)}s">${art}</g>` : art) + '</g>';
   });
 
-  const name = text(cfg.name, 0, 0, 10);
-  const tag = text(cfg.tagline, 0, 0, 3);
-  const cx = (w) => Math.round((W - w) / 2);
   const specks = Array.from({ length: 48 }, (_, i) => {
     const x = i * 37, y = GROUND + 10 + ((i * 7) % 4) * 4;
     return `<rect x="${x}" y="${y}" width="${i % 3 ? 4 : 10}" height="3"/>`;
@@ -56,16 +70,10 @@ export function header(cfg, icons, t) {
 .l1{animation:l1 .22s steps(1,end) infinite}.l2{animation:l2 .22s steps(1,end) infinite}
 @keyframes l1{0%{opacity:1}50%{opacity:0}}@keyframes l2{0%{opacity:0}50%{opacity:1}}
 .ground{animation:gr ${fmt((37 * 8) / SPEED)}s linear infinite}@keyframes gr{to{transform:translateX(-${37 * 8}px)}}
-.bob{animation:bob 1.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-6px)}}
-.c1{animation:cl 30s linear infinite}.c2{animation:cl 42s linear -19s infinite}
-@keyframes cl{from{transform:translateX(${W}px)}to{transform:translateX(-80px)}}`;
+.bob{animation:bob 1.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-6px)}}`;
 
   const body =
     `<rect width="${W}" height="${H}" fill="${t.bg}"/>` +
-    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 2)">${grid(CLOUD, 0, 0, 2)}</g></g>` +
-    `<g class="c2"><g transform="translate(0 8)">${grid(CLOUD, 0, 0, 2)}</g></g></g>` +
-    `<g fill="${t.fg}" transform="translate(${cx(name.width)} 26)">${name.svg}</g>` +
-    `<g fill="${t.mid}" transform="translate(${cx(tag.width)} 112)">${tag.svg}</g>` +
     `<rect x="0" y="${GROUND}" width="${W}" height="3" fill="${t.fg}"/>` +
     `<g fill="${t.mid}" class="ground">${specks}</g>` +
     `<g fill="${t.fg}">${obsSvg}</g>` +
@@ -84,30 +92,6 @@ export function title(label, t) {
   let dots = '';
   for (let x = lineX; x < W; x += 16) dots += `<rect x="${x}" y="${26 + 3 * s}" width="8" height="${s}"/>`;
   return svgDoc(W, H, t, `<g fill="${t.fg}">${tx.svg}</g><g fill="${t.faint}">${dots}</g>`);
-}
-
-// ---------------------------------------------------------------- tech stack
-export function stack(items, icons, t) {
-  const perRow = 7, cell = 124, W = perRow * cell, rowH = 120, s = 2;
-  const rows = Math.ceil(items.length / perRow), H = rows * rowH + 8;
-  let body = '';
-  for (let r = 0; r < rows; r++) {
-    const row = items.slice(r * perRow, (r + 1) * perRow);
-    const off = (W - row.length * cell) / 2, ground = r * rowH + 64;
-    body += `<rect x="0" y="${ground}" width="${W}" height="2" fill="${t.faint}"/>`;
-    row.forEach(([key, label], i) => {
-      const cx = off + i * cell + cell / 2;
-      const ic = icons[key];
-      if (ic) {
-        let last = ic.length - 1;
-        while (last > 0 && !ic[last].includes('X')) last--;
-        body += `<g fill="${t.fg}">${grid(ic, cx - 24, ground - 6 - (last + 1) * s, s)}</g>`;
-      }
-      const lw = textWidth(label, 2);
-      body += `<g fill="${t.mid}">${text(label, cx - lw / 2, ground + 16, 2).svg}</g>`;
-    });
-  }
-  return svgDoc(W, H, t, body);
 }
 
 // ---------------------------------------------------------------- social button
