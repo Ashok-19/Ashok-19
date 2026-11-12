@@ -4,7 +4,7 @@ on:
   push:
     paths: ['scripts/**', 'assets/**', '.github/workflows/build.yml']
   schedule:
-    - cron: '17 3 * * *' # daily
+    - cron: '*/30 * * * *' # every 30 minutes
   workflow_dispatch:
 
 permissions:
