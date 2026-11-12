@@ -5,7 +5,7 @@ const CLOUD = ['....XXXX......', '..XXXXXXXX....', 'XXXXXXXXXXXXXX'];
 
 // ---------------------------------------------------------------- header
 export function header(cfg, t) {
-  const W = 900, H = 240, GROUND = 196, T = 3.2;
+  const W = 900, H = 200, GROUND = 168, T = 3.2;
   const run1 = loadSprite('run-1'), run2 = loadSprite('run-2'), jump = loadSprite('jump');
   const dh = 76, dw = (run1.w / run1.h) * dh, dx = 70;
   const rockW = 32;
@@ -28,21 +28,19 @@ export function header(cfg, t) {
 @keyframes l1{0%{opacity:1}50%{opacity:0}}@keyframes l2{0%{opacity:0}50%{opacity:1}}
 .dino{animation:jump ${T}s infinite}
 @keyframes jump{0%,${fmt(j0)}%{transform:translateY(0);animation-timing-function:cubic-bezier(.3,.7,.5,1)}
-${fmt(cross)}%{transform:translateY(-78px);animation-timing-function:cubic-bezier(.5,0,.7,.3)}${fmt(j1)}%,100%{transform:translateY(0)}}
+${fmt(cross)}%{transform:translateY(-70px);animation-timing-function:cubic-bezier(.5,0,.7,.3)}${fmt(j1)}%,100%{transform:translateY(0)}}
 .rock{animation:rock ${T}s linear infinite}
 @keyframes rock{from{transform:translateX(${W + 20}px)}to{transform:translateX(-40px)}}
 .ground{animation:gr 1.1s linear infinite}@keyframes gr{to{transform:translateX(-${37 * 8}px)}}
 .c1{animation:cl 16s linear infinite}.c2{animation:cl 23s linear -11s infinite}
-@keyframes cl{from{transform:translateX(${W}px)}to{transform:translateX(-80px)}}
-.cur{animation:blink 1s steps(1,end) infinite}@keyframes blink{50%{opacity:0}}`;
+@keyframes cl{from{transform:translateX(${W}px)}to{transform:translateX(-80px)}}`;
 
   const body =
     `<rect width="${W}" height="${H}" fill="${t.bg}"/>` +
-    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 34)">${grid(CLOUD, 0, 0, 4)}</g></g>` +
-    `<g class="c2"><g transform="translate(0 70)">${grid(CLOUD, 0, 0, 3)}</g></g></g>` +
-    `<g fill="${t.fg}" transform="translate(${textX(name.width)} 44)">${name.svg}</g>` +
-    `<g fill="${t.mid}" transform="translate(${textX(tag.width)} 130)">${tag.svg}` +
-    `<rect class="cur" x="${tag.width + 8}" y="0" width="12" height="21" fill="${t.fg}"/></g>` +
+    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 6)">${grid(CLOUD, 0, 0, 3)}</g></g>` +
+    `<g class="c2"><g transform="translate(0 14)">${grid(CLOUD, 0, 0, 2)}</g></g></g>` +
+    `<g fill="${t.fg}" transform="translate(${textX(name.width)} 34)">${name.svg}</g>` +
+    `<g fill="${t.mid}" transform="translate(${textX(tag.width)} 120)">${tag.svg}</g>` +
     `<rect x="0" y="${GROUND}" width="${W}" height="3" fill="${t.fg}"/>` +
     `<g fill="${t.mid}" class="ground">${specks}</g>` +
     `<g fill="${t.fg}" class="rock"><g transform="translate(0 ${GROUND - 24})">${grid(ROCK, 0, 0, 4)}</g></g>` +
@@ -55,11 +53,11 @@ ${fmt(cross)}%{transform:translateY(-78px);animation-timing-function:cubic-bezie
 
 // ---------------------------------------------------------------- section title
 export function title(label, t) {
-  const W = 900, H = 48, s = 4;
-  const tx = text('> ' + label, 0, 10, s);
+  const W = 900, H = 64, s = 4;
+  const tx = text('> ' + label, 0, 26, s);
   const lineX = tx.width + 24;
   let dots = '';
-  for (let x = lineX; x < W; x += 16) dots += `<rect x="${x}" y="${10 + 3 * s}" width="8" height="${s}"/>`;
+  for (let x = lineX; x < W; x += 16) dots += `<rect x="${x}" y="${26 + 3 * s}" width="8" height="${s}"/>`;
   return svgDoc(W, H, t, `<g fill="${t.fg}">${tx.svg}</g><g fill="${t.faint}">${dots}</g>`);
 }
 
@@ -75,7 +73,11 @@ export function stack(items, icons, t) {
     row.forEach(([key, label], i) => {
       const cx = off + i * cell + cell / 2;
       const ic = icons[key];
-      if (ic) body += `<g fill="${t.fg}">${grid(ic, cx - 24, ground - 52, s)}</g>`;
+      if (ic) {
+        let last = ic.length - 1;
+        while (last > 0 && !ic[last].includes('X')) last--;
+        body += `<g fill="${t.fg}">${grid(ic, cx - 24, ground - 6 - (last + 1) * s, s)}</g>`;
+      }
       const lw = textWidth(label, 2);
       body += `<g fill="${t.mid}">${text(label, cx - lw / 2, ground + 16, 2).svg}</g>`;
     });
@@ -97,31 +99,20 @@ export function social(s, icons, t) {
   return svgDoc(W, H, t, `<rect width="${W}" height="${H}" fill="${t.bg}"/>${frame}${icon}${label}${handle}`);
 }
 
-// ---------------------------------------------------------------- stats scoreboard
+// ---------------------------------------------------------------- stats
 export function stats(d, t) {
-  const W = 900, H = 168;
-  const pad = (n, k = 5) => String(Math.max(0, n | 0)).padStart(k, '0');
-  let body = '';
-  // Big score line, dino-game style: HI <best streak>   <current streak>
-  const hi = text('HI ' + pad(d.longestStreak), 0, 0, 6);
-  const cur = text(pad(d.currentStreak), 0, 0, 6);
-  const gap = 60, total = hi.width + gap + cur.width, x0 = (W - total) / 2;
-  body += `<g fill="${t.mid}" transform="translate(${x0} 10)">${hi.svg}</g>`;
-  body += `<g fill="${t.fg}" transform="translate(${x0 + hi.width + gap} 10)">${cur.svg}</g>`;
-  const l1 = 'BEST STREAK', l2 = 'CURRENT STREAK';
-  body += `<g fill="${t.mid}">${text(l1, x0 + hi.width - textWidth(l1, 2), 64, 2).svg}${text(l2, x0 + hi.width + gap, 64, 2).svg}</g>`;
-  body += `<rect x="40" y="96" width="${W - 80}" height="2" fill="${t.faint}"/>`;
-  const cells = [
-    ['CONTRIBUTIONS', d.yearContributions, 'LAST 12 MONTHS'],
-    ['STARS', d.stars, 'EARNED'],
-    ['REPOS', d.repos, 'PUBLIC'],
-    ['FOLLOWERS', d.followers, 'ON GITHUB'],
+  const W = 900, H = 112, cells = [
+    [d.yearContributions, 'CONTRIBUTIONS'],
+    [d.currentStreak, 'CURRENT STREAK'],
+    [d.longestStreak, 'BEST STREAK'],
+    [d.stars, 'STARS'],
   ];
-  const cw = (W - 80) / cells.length;
-  cells.forEach(([lab, val, sub], i) => {
-    const cx = 40 + i * cw + cw / 2, v = String(val);
-    body += `<g fill="${t.fg}">${text(v, cx - textWidth(v, 4) / 2, 114, 4).svg}</g>`;
-    body += `<g fill="${t.mid}">${text(lab, cx - textWidth(lab, 2) / 2, 148, 2).svg}</g>`;
+  const cw = W / cells.length;
+  let body = '';
+  cells.forEach(([val, lab], i) => {
+    const cx = i * cw + cw / 2, v = String(val);
+    body += `<g fill="${t.fg}">${text(v, cx - textWidth(v, 6) / 2, 22, 6).svg}</g>`;
+    body += `<g fill="${t.mid}">${text(lab, cx - textWidth(lab, 2) / 2, 80, 2).svg}</g>`;
   });
   return svgDoc(W, H, t, `<rect width="${W}" height="${H}" fill="${t.bg}"/>${body}`);
 }
@@ -133,7 +124,7 @@ function rng(seed) {
 }
 
 export function contrib(d, cfg, t, seed) {
-  const STEP = 14, CELL = 11, LEFT = 20, TOP = 56;
+  const STEP = 14, CELL = 11, LEFT = 20, TOP = 48;
   const weeks = d.weeks;
   const W = LEFT * 2 + weeks.length * STEP - (STEP - CELL), H = TOP + 7 * STEP + 44;
   const stand = loadSprite('stand'), jumpS = loadSprite('jump');
@@ -162,7 +153,7 @@ export function contrib(d, cfg, t, seed) {
     if (k < path.length - 1) {
       const q = pos(path[k + 1]), dist = Math.hypot(q.x - p.x, q.y - p.y);
       air = cfg.hop.airtime + cfg.hop.extraAir * (dist / maxDist);
-      h = Math.min(60, 14 + dist * 0.09);
+      h = Math.min(24, 12 + dist * 0.04);
       ev.push({ p, q, arrive, depart, air, h, dir: Math.sign(q.x - p.x) });
     } else ev.push({ p, q: null, arrive, depart, air: 0, h: 0, dir: 0 });
     time = depart + air;
@@ -230,14 +221,11 @@ export function contrib(d, cfg, t, seed) {
 
 // ---------------------------------------------------------------- footer
 export function footer(t) {
-  const W = 900, H = 120, stand = loadSprite('stand');
-  const msg = text('THANKS FOR STOPPING BY!', 0, 0, 4);
-  const dh = 48, dw = (stand.w / stand.h) * dh;
-  const total = dw + 24 + msg.width, x0 = (W - total) / 2;
+  const W = 900, H = 96, stand = loadSprite('stand');
+  const dh = 48, dw = (stand.w / stand.h) * dh, x0 = (W - dw) / 2, ground = 76;
   const style = `.bob{animation:bob 1.6s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-6px)}}`;
   return svgDoc(W, H, t,
     `<rect width="${W}" height="${H}" fill="${t.bg}"/>` +
-    `<g class="bob" fill="${t.fg}">${placeSprite(stand, t, x0, 92 - dh, dh)}</g>` +
-    `<rect x="${x0 - 40}" y="92" width="${total + 80}" height="3" fill="${t.fg}"/>` +
-    `<g fill="${t.fg}" transform="translate(${x0 + dw + 24} 58)">${msg.svg}</g>`, style);
+    `<g class="bob" fill="${t.fg}">${placeSprite(stand, t, x0, ground - dh + 1, dh)}</g>` +
+    `<rect x="${W / 2 - 90}" y="${ground}" width="180" height="3" fill="${t.fg}"/>`, style);
 }

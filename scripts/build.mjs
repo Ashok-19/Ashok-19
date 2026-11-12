@@ -75,7 +75,7 @@ const out = (f, s) => writeFileSync(new URL(f, OUT), s);
 
 for (const [name, t] of Object.entries(THEMES)) {
   out(`header-${name}.svg`, C.header(cfg, t));
-  for (const [id, label] of [['about', 'WHO AM I'], ['stack', 'TECH STACK'], ['stats', 'HIGH SCORES'], ['contrib', 'CONTRIBUTIONS'], ['connect', 'CONNECT']])
+  for (const [id, label] of [['about', 'WHO AM I'], ['stack', 'TECH STACK'], ['stats', 'GITHUB STATS'], ['contrib', 'CONTRIBUTIONS'], ['connect', 'CONNECT']])
     out(`title-${id}-${name}.svg`, C.title(label, t));
   out(`stack-${name}.svg`, C.stack(cfg.stack, icons, t));
   for (const s of cfg.socials) out(`social-${s.id}-${name}.svg`, C.social(s, icons, t));

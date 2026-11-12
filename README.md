@@ -30,14 +30,14 @@ I work on **computer vision**, **deep learning**, **AI agents** and **reinforcem
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stats-dark.svg">
-  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stats-light.svg" alt="High scores">
+  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stats-light.svg" alt="GitHub stats">
 </picture>
 
 <div align="center">
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/stats-dark.svg">
-  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/stats-light.svg" alt="GitHub stats: streaks, contributions, stars, repos and followers">
+  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/stats-light.svg" alt="GitHub stats: contributions, current streak, best streak and stars">
 </picture>
 
 </div>
@@ -73,7 +73,7 @@ I work on **computer vision**, **deep learning**, **AI agents** and **reinforcem
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/footer-dark.svg">
-  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/footer-light.svg" alt="Thanks for stopping by!">
+  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/footer-light.svg" alt="Pixel dino">
 </picture>
 
 </div>
