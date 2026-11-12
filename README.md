@@ -15,13 +15,6 @@
 </div>
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-about-dark.svg">
-  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-about-light.svg" alt="Who am I">
-</picture>
-
-I work on **computer vision**, **deep learning**, **AI agents** and **reinforcement learning**, and I compete in [Kaggle](https://www.kaggle.com/ashok205) competitions. Currently learning **web development**.
-
-<picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stats-dark.svg">
   <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/title-stats-light.svg" alt="GitHub stats">
 </picture>
