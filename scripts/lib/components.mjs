@@ -86,11 +86,11 @@ export function run(cfg, icons, t) {
 
 // ---------------------------------------------------------------- section title
 export function title(label, t) {
-  const W = 900, H = 64, s = 4;
-  const tx = text('> ' + label, 0, 26, s);
+  const W = 900, H = 116, s = 4;
+  const tx = text('> ' + label, 0, 68, s);
   const lineX = tx.width + 24;
   let dots = '';
-  for (let x = lineX; x < W; x += 16) dots += `<rect x="${x}" y="${26 + 3 * s}" width="8" height="${s}"/>`;
+  for (let x = lineX; x < W; x += 16) dots += `<rect x="${x}" y="${68 + 3 * s}" width="8" height="${s}"/>`;
   return svgDoc(W, H, t, `<g fill="${t.fg}">${tx.svg}</g><g fill="${t.faint}">${dots}</g>`);
 }
 
