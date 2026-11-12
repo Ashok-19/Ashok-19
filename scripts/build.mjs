@@ -68,19 +68,17 @@ const data = sample ? sampleData() : await fetchData(cfg.user, token);
 Object.assign(data, streaks(data.weeks));
 
 const icons = loadIcons();
-const today = new Date().toISOString().slice(0, 10);
-const seed = sample ? 12345 : [...today].reduce((a, c) => a * 31 + c.charCodeAt(0), 7) >>> 0;
 mkdirSync(OUT, { recursive: true });
 const out = (f, s) => writeFileSync(new URL(f, OUT), s);
 
 for (const [name, t] of Object.entries(THEMES)) {
-  out(`header-${name}.svg`, C.header(cfg, t));
+  out(`header-${name}.svg`, C.header(cfg, icons, t));
   for (const [id, label] of [['about', 'WHO AM I'], ['stack', 'TECH STACK'], ['stats', 'GITHUB STATS'], ['contrib', 'CONTRIBUTIONS'], ['connect', 'CONNECT']])
     out(`title-${id}-${name}.svg`, C.title(label, t));
   out(`stack-${name}.svg`, C.stack(cfg.stack, icons, t));
   for (const s of cfg.socials) out(`social-${s.id}-${name}.svg`, C.social(s, icons, t));
   out(`stats-${name}.svg`, C.stats(data, t));
-  out(`contrib-${name}.svg`, C.contrib(data, cfg, t, seed));
+  out(`contrib-${name}.svg`, C.contrib(data, cfg, t));
   out(`footer-${name}.svg`, C.footer(t));
 }
 console.log(`built dist/ (${sample ? 'sample' : 'live'} data, ${data.yearContributions} contributions)`);

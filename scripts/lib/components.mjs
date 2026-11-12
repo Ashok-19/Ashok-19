@@ -1,49 +1,71 @@
 import { text, textWidth, grid, loadSprite, placeSprite, svgDoc, fmt } from './pixel.mjs';
 
-const ROCK = ['...XX...', '..XXXX..', '.XXXXXX.', 'XXXXXXXX', 'XXXXXXXX', '.XXXXXX.'];
 const CLOUD = ['....XXXX......', '..XXXXXXXX....', 'XXXXXXXXXXXXXX'];
 
 // ---------------------------------------------------------------- header
-export function header(cfg, t) {
-  const W = 900, H = 200, GROUND = 168, T = 3.2;
+// The dino runs and jumps over the tech-stack logos as they scroll past.
+export function header(cfg, icons, t) {
+  const W = 900, H = 262, GROUND = 230;
+  const SPEED = 260, GAP = 1.8, AIR = 0.7, APEX = 84, S = 2;
   const run1 = loadSprite('run-1'), run2 = loadSprite('run-2'), jump = loadSprite('jump');
   const dh = 76, dw = (run1.w / run1.h) * dh, dx = 70;
-  const rockW = 32;
-  const cross = (W + 20 - (dx + dw / 2 - rockW / 2)) / (W + 60) * 100; // % when rock is under the dino
-  const j0 = cross - 8.5, j1 = cross + 8.5;
+
+  const obs = cfg.stack.map(([k]) => icons[k]).filter(Boolean);
+  const T = obs.length * GAP;
+  const travel = (W + 80) / SPEED;
+  // seconds from an obstacle's start until it is centred under the dino
+  const toCross = (W + 10 + 24 - (dx + dw / 2)) / SPEED;
+  let lead = 0;
+  const crossings = () => obs.map((_, i) => (i * GAP + lead + toCross) % T);
+  while (crossings().some((c) => c < AIR / 2 + 0.05 || c > T - AIR / 2 - 0.05)) lead += 0.1;
+  const P = (sec) => fmt((sec / T) * 100) + '%';
+
+  let jumpKf = '0%{transform:translateY(0)}', runKf = '0%{opacity:1}', airKf = '0%{opacity:0}';
+  for (const c of crossings().sort((x, y) => x - y)) {
+    const a = c - AIR / 2, z = c + AIR / 2;
+    jumpKf += `${P(a)}{transform:translateY(0);animation-timing-function:cubic-bezier(.33,.66,.66,1)}` +
+      `${P(c)}{transform:translateY(-${APEX}px);animation-timing-function:cubic-bezier(.33,0,.66,.33)}${P(z)}{transform:translateY(0)}`;
+    runKf += `${P(a)}{opacity:0}${P(z)}{opacity:1}`;
+    airKf += `${P(a)}{opacity:1}${P(z)}{opacity:0}`;
+  }
+
+  let obsSvg = '';
+  obs.forEach((rows, i) => {
+    let last = rows.length - 1;
+    while (last > 0 && !rows[last].includes('X')) last--;
+    obsSvg += `<g class="ob" style="animation-delay:${fmt(i * GAP + lead)}s">` +
+      `<g transform="translate(0 ${GROUND - 1 - (last + 1) * S})">${grid(rows, 0, 0, S)}</g></g>`;
+  });
 
   const name = text(cfg.name, 0, 0, 10);
   const tag = text(cfg.tagline, 0, 0, 3);
-  const textX = (w) => Math.round(dx + dw + 40 + (W - (dx + dw + 40) - w) / 2);
+  const cx = (w) => Math.round((W - w) / 2);
   const specks = Array.from({ length: 48 }, (_, i) => {
     const x = i * 37, y = GROUND + 10 + ((i * 7) % 4) * 4;
     return `<rect x="${x}" y="${y}" width="${i % 3 ? 4 : 10}" height="3"/>`;
   }).join('');
 
   const style = `
-.run{animation:runv ${T}s steps(1,end) infinite}.air{animation:airv ${T}s steps(1,end) infinite}
-@keyframes runv{0%{opacity:1}${fmt(j0)}%{opacity:0}${fmt(j1)}%{opacity:1}}
-@keyframes airv{0%{opacity:0}${fmt(j0)}%{opacity:1}${fmt(j1)}%{opacity:0}}
+.ob{transform:translateX(${W + 10}px);animation:ob ${fmt(T)}s linear infinite backwards}
+@keyframes ob{0%{transform:translateX(${W + 10}px)}${P(travel)}{transform:translateX(-70px)}100%{transform:translateX(-70px)}}
+.dino{animation:jump ${fmt(T)}s linear infinite}@keyframes jump{${jumpKf}}
+.run{animation:runv ${fmt(T)}s steps(1,end) infinite}@keyframes runv{${runKf}}
+.air{animation:airv ${fmt(T)}s steps(1,end) infinite}@keyframes airv{${airKf}}
 .l1{animation:l1 .22s steps(1,end) infinite}.l2{animation:l2 .22s steps(1,end) infinite}
 @keyframes l1{0%{opacity:1}50%{opacity:0}}@keyframes l2{0%{opacity:0}50%{opacity:1}}
-.dino{animation:jump ${T}s infinite}
-@keyframes jump{0%,${fmt(j0)}%{transform:translateY(0);animation-timing-function:cubic-bezier(.3,.7,.5,1)}
-${fmt(cross)}%{transform:translateY(-70px);animation-timing-function:cubic-bezier(.5,0,.7,.3)}${fmt(j1)}%,100%{transform:translateY(0)}}
-.rock{animation:rock ${T}s linear infinite}
-@keyframes rock{from{transform:translateX(${W + 20}px)}to{transform:translateX(-40px)}}
-.ground{animation:gr 1.1s linear infinite}@keyframes gr{to{transform:translateX(-${37 * 8}px)}}
-.c1{animation:cl 16s linear infinite}.c2{animation:cl 23s linear -11s infinite}
+.ground{animation:gr ${fmt((37 * 8) / SPEED)}s linear infinite}@keyframes gr{to{transform:translateX(-${37 * 8}px)}}
+.c1{animation:cl 30s linear infinite}.c2{animation:cl 42s linear -19s infinite}
 @keyframes cl{from{transform:translateX(${W}px)}to{transform:translateX(-80px)}}`;
 
   const body =
     `<rect width="${W}" height="${H}" fill="${t.bg}"/>` +
-    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 6)">${grid(CLOUD, 0, 0, 3)}</g></g>` +
-    `<g class="c2"><g transform="translate(0 14)">${grid(CLOUD, 0, 0, 2)}</g></g></g>` +
-    `<g fill="${t.fg}" transform="translate(${textX(name.width)} 34)">${name.svg}</g>` +
-    `<g fill="${t.mid}" transform="translate(${textX(tag.width)} 120)">${tag.svg}</g>` +
+    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 150)">${grid(CLOUD, 0, 0, 3)}</g></g>` +
+    `<g class="c2"><g transform="translate(0 170)">${grid(CLOUD, 0, 0, 2)}</g></g></g>` +
+    `<g fill="${t.fg}" transform="translate(${cx(name.width)} 22)">${name.svg}</g>` +
+    `<g fill="${t.mid}" transform="translate(${cx(tag.width)} 110)">${tag.svg}</g>` +
     `<rect x="0" y="${GROUND}" width="${W}" height="3" fill="${t.fg}"/>` +
     `<g fill="${t.mid}" class="ground">${specks}</g>` +
-    `<g fill="${t.fg}" class="rock"><g transform="translate(0 ${GROUND - 24})">${grid(ROCK, 0, 0, 4)}</g></g>` +
+    `<g fill="${t.fg}">${obsSvg}</g>` +
     `<g class="dino" fill="${t.fg}">` +
     `<g class="run"><g class="l1">${placeSprite(run1, t, dx, GROUND - dh + 2, dh)}</g>` +
     `<g class="l2">${placeSprite(run2, t, dx, GROUND - dh + 2, dh)}</g></g>` +
@@ -118,12 +140,7 @@ export function stats(d, t) {
 }
 
 // ---------------------------------------------------------------- contribution hop
-function rng(seed) {
-  let a = seed >>> 0;
-  return () => { a = (a + 0x6d2b79f5) >>> 0; let x = Math.imul(a ^ (a >>> 15), 1 | a); x ^= x + Math.imul(x ^ (x >>> 7), 61 | x); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
-}
-
-export function contrib(d, cfg, t, seed) {
+export function contrib(d, cfg, t) {
   const STEP = 14, CELL = 11, LEFT = 20, TOP = 48;
   const weeks = d.weeks;
   const W = LEFT * 2 + weeks.length * STEP - (STEP - CELL), H = TOP + 7 * STEP + 44;
@@ -136,14 +153,21 @@ export function contrib(d, cfg, t, seed) {
     tiles.push({ x: LEFT + wi * STEP, y: TOP + day.weekday * STEP, level: day.level, count: day.count });
   }));
 
-  // choose hop targets
-  const r = rng(seed);
-  const active = tiles.filter((c) => c.level > 0);
-  for (let i = active.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [active[i], active[j]] = [active[j], active[i]]; }
-  const path = active.slice(0, cfg.hop.count);
+  // hop order: start at the earliest active day, then always the nearest unvisited one
+  const todo = tiles.filter((c) => c.level > 0);
+  const path = [];
+  let cur = todo.shift();
+  while (cur) {
+    path.push(cur);
+    let best = -1, bd = Infinity;
+    todo.forEach((c, i) => {
+      const d = Math.hypot(c.x - cur.x, c.y - cur.y);
+      if (d < bd - 0.01) { bd = d; best = i; }
+    });
+    cur = best < 0 ? null : todo.splice(best, 1)[0];
+  }
 
   // timeline
-  const maxDist = Math.hypot(W, 7 * STEP);
   const pos = (c) => ({ x: c.x + CELL / 2, y: c.y + CELL * 0.8 });
   const ev = []; let time = 0.4;
   path.forEach((c, k) => {
@@ -152,8 +176,8 @@ export function contrib(d, cfg, t, seed) {
     let air = 0, h = 0;
     if (k < path.length - 1) {
       const q = pos(path[k + 1]), dist = Math.hypot(q.x - p.x, q.y - p.y);
-      air = cfg.hop.airtime + cfg.hop.extraAir * (dist / maxDist);
-      h = Math.min(24, 12 + dist * 0.04);
+      air = cfg.hop.airtime + Math.min(cfg.hop.extraAir, (dist - STEP) * 0.004);
+      h = Math.min(28, 10 + dist * 0.06);
       ev.push({ p, q, arrive, depart, air, h, dir: Math.sign(q.x - p.x) });
     } else ev.push({ p, q: null, arrive, depart, air: 0, h: 0, dir: 0 });
     time = depart + air;
@@ -193,7 +217,7 @@ export function contrib(d, cfg, t, seed) {
     const fill = t.green[c.level];
     if (k === undefined) { tileSvg += `<rect x="${c.x}" y="${c.y}" width="${CELL}" height="${CELL}" fill="${fill}"/>`; return; }
     const g = ev[k].arrive + 0.04;
-    tileCss += `.t${k}{animation:t${k} ${fmt(T)}s linear infinite}@keyframes t${k}{0%,${P(g)}{fill:${fill}}${P(g + 0.12)},${P(reset)}{fill:${t.visited}}${P(reset + 0.4)},100%{fill:${fill}}}`;
+    tileCss += `.t${k}{animation:t${k} ${fmt(T)}s linear infinite}@keyframes t${k}{0%,${P(g)}{fill:${fill}}${P(g + 0.12)},${P(reset)}{fill:${t.green[0]}}${P(reset + 0.4)},100%{fill:${fill}}}`;
     tileSvg += `<rect class="t${k}" x="${c.x}" y="${c.y}" width="${CELL}" height="${CELL}" fill="${fill}"/>`;
   });
 

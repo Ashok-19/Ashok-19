@@ -18,12 +18,11 @@ export default {
     { id: 'email', icon: 'gmail', label: 'EMAIL', handle: 'SAY HI', url: 'mailto:ashokraja1910@gmail.com' },
   ],
 
-  // Contribution-graph hopping.
+  // Contribution-graph hopping: the dino visits every active day, nearest first.
   hop: {
-    count: 50,        // hops per loop
-    airtime: 0.45,    // seconds in the air for a short hop
-    extraAir: 0.12,   // extra seconds for the longest possible hop
-    land: 0.2,        // seconds standing on a tile before the next hop
-    endPause: 1.5,    // pause before the graph resets
+    airtime: 0.5,     // seconds in the air for a hop to a neighbouring tile
+    extraAir: 0.4,    // up to this much extra air time for long hops over gaps
+    land: 0.35,       // seconds standing on a tile before the next hop
+    endPause: 1.5,    // pause after the last tile before the graph resets
   },
 };
