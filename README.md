@@ -49,7 +49,7 @@
 
 <div align="center">
 
-<a href="https://linkedin.com/in/ashok-19"><picture>  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-linkedin-dark.svg">  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-linkedin-light.svg" alt="LinkedIn: ashok-19" width="272"></picture></a>
+<a href="https://www.linkedin.com/in/ashok19/"><picture>  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-linkedin-dark.svg">  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-linkedin-light.svg" alt="LinkedIn: ashok-19" width="272"></picture></a>
 <a href="https://www.kaggle.com/ashok205"><picture>  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-kaggle-dark.svg">  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-kaggle-light.svg" alt="Kaggle: ashok205" width="272"></picture></a>
 <a href="mailto:ashokraja1910@gmail.com"><picture>  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-email-dark.svg">  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-email-light.svg" alt="Email" width="272"></picture></a>
 
