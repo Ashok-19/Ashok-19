@@ -1,0 +1,40 @@
+name: Build profile images
+
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/**', 'assets/**', '.github/workflows/build.yml']
+  schedule:
+    - cron: '17 3 * * *' # daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-images
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build SVGs
+        run: node scripts/build.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional: a personal token (read:user) so private contributions count too.
+          GH_STATS_TOKEN: ${{ secrets.GH_STATS_TOKEN }}
+      - name: Publish to the output branch
+        run: |
+          cd dist
+          git init -q -b output
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -q -m "Build images $(date -u +%F)"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" output
