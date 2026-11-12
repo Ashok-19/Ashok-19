@@ -54,12 +54,3 @@
 <a href="mailto:ashokraja1910@gmail.com"><picture>  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-email-dark.svg">  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/social-email-light.svg" alt="Email" width="272"></picture></a>
 
 </div>
-
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/footer-dark.svg">
-  <img src="https://raw.githubusercontent.com/Ashok-19/Ashok-19/output/footer-light.svg" alt="Pixel dino">
-</picture>
-
-</div>

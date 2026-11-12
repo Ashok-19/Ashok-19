@@ -229,14 +229,3 @@ export function contrib(d, cfg, t) {
       `<g class="gnd">${dino(stand)}</g><g class="air">${dino(jumpS)}</g></g></g></g></g>` : '');
   return svgDoc(W, H, t, body, style);
 }
-
-// ---------------------------------------------------------------- footer
-export function footer(t) {
-  const W = 900, H = 96, stand = loadSprite('stand');
-  const dh = 48, dw = (stand.w / stand.h) * dh, x0 = (W - dw) / 2, ground = 76;
-  const style = `.bob{animation:bob 1.6s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-6px)}}`;
-  return svgDoc(W, H, t,
-    `<rect width="${W}" height="${H}" fill="${t.bg}"/>` +
-    `<g class="bob" fill="${t.fg}">${placeSprite(stand, t, x0, ground - dh + 1, dh)}</g>` +
-    `<rect x="${W / 2 - 90}" y="${ground}" width="180" height="3" fill="${t.fg}"/>`, style);
-}

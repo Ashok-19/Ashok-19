@@ -79,6 +79,5 @@ for (const [name, t] of Object.entries(THEMES)) {
   for (const s of cfg.socials) out(`social-${s.id}-${name}.svg`, C.social(s, icons, t));
   out(`stats-${name}.svg`, C.stats(data, t));
   out(`contrib-${name}.svg`, C.contrib(data, cfg, t));
-  out(`footer-${name}.svg`, C.footer(t));
 }
 console.log(`built dist/ (${sample ? 'sample' : 'live'} data, ${data.yearContributions} contributions)`);
