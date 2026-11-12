@@ -5,18 +5,18 @@ const CLOUD = ['....XXXX......', '..XXXXXXXX....', 'XXXXXXXXXXXXXX'];
 // ---------------------------------------------------------------- header
 // The dino runs and jumps over the tech-stack logos as they scroll past.
 export function header(cfg, icons, t) {
-  const W = 900, H = 262, GROUND = 230;
+  const W = 900, H = 304, GROUND = 272, FLY = 142;
   const SPEED = 260, GAP = 1.8, AIR = 0.7, APEX = 84, S = 2;
   const run1 = loadSprite('run-1'), run2 = loadSprite('run-2'), jump = loadSprite('jump');
   const dh = 76, dw = (run1.w / run1.h) * dh, dx = 70;
 
-  const obs = cfg.stack.map(([k]) => icons[k]).filter(Boolean);
+  const obs = cfg.stack.filter(([k]) => icons[k]).map(([k, , fly]) => ({ rows: icons[k], fly: fly === 'fly' }));
   const T = obs.length * GAP;
   const travel = (W + 80) / SPEED;
   // seconds from an obstacle's start until it is centred under the dino
   const toCross = (W + 10 + 24 - (dx + dw / 2)) / SPEED;
   let lead = 0;
-  const crossings = () => obs.map((_, i) => (i * GAP + lead + toCross) % T);
+  const crossings = () => obs.flatMap((o, i) => (o.fly ? [] : [(i * GAP + lead + toCross) % T]));
   while (crossings().some((c) => c < AIR / 2 + 0.05 || c > T - AIR / 2 - 0.05)) lead += 0.1;
   const P = (sec) => fmt((sec / T) * 100) + '%';
 
@@ -30,11 +30,13 @@ export function header(cfg, icons, t) {
   }
 
   let obsSvg = '';
-  obs.forEach((rows, i) => {
+  obs.forEach(({ rows, fly }, i) => {
     let last = rows.length - 1;
     while (last > 0 && !rows[last].includes('X')) last--;
+    const y = fly ? FLY : GROUND - 1 - (last + 1) * S;
+    const art = `<g transform="translate(0 ${y})">${grid(rows, 0, 0, S)}</g>`;
     obsSvg += `<g class="ob" style="animation-delay:${fmt(i * GAP + lead)}s">` +
-      `<g transform="translate(0 ${GROUND - 1 - (last + 1) * S})">${grid(rows, 0, 0, S)}</g></g>`;
+      (fly ? `<g class="bob" style="animation-delay:-${fmt(i * 0.37)}s">${art}</g>` : art) + '</g>';
   });
 
   const name = text(cfg.name, 0, 0, 10);
@@ -54,15 +56,16 @@ export function header(cfg, icons, t) {
 .l1{animation:l1 .22s steps(1,end) infinite}.l2{animation:l2 .22s steps(1,end) infinite}
 @keyframes l1{0%{opacity:1}50%{opacity:0}}@keyframes l2{0%{opacity:0}50%{opacity:1}}
 .ground{animation:gr ${fmt((37 * 8) / SPEED)}s linear infinite}@keyframes gr{to{transform:translateX(-${37 * 8}px)}}
+.bob{animation:bob 1.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-6px)}}
 .c1{animation:cl 30s linear infinite}.c2{animation:cl 42s linear -19s infinite}
 @keyframes cl{from{transform:translateX(${W}px)}to{transform:translateX(-80px)}}`;
 
   const body =
     `<rect width="${W}" height="${H}" fill="${t.bg}"/>` +
-    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 150)">${grid(CLOUD, 0, 0, 3)}</g></g>` +
-    `<g class="c2"><g transform="translate(0 170)">${grid(CLOUD, 0, 0, 2)}</g></g></g>` +
-    `<g fill="${t.fg}" transform="translate(${cx(name.width)} 22)">${name.svg}</g>` +
-    `<g fill="${t.mid}" transform="translate(${cx(tag.width)} 110)">${tag.svg}</g>` +
+    `<g fill="${t.faint}"><g class="c1"><g transform="translate(0 2)">${grid(CLOUD, 0, 0, 2)}</g></g>` +
+    `<g class="c2"><g transform="translate(0 8)">${grid(CLOUD, 0, 0, 2)}</g></g></g>` +
+    `<g fill="${t.fg}" transform="translate(${cx(name.width)} 26)">${name.svg}</g>` +
+    `<g fill="${t.mid}" transform="translate(${cx(tag.width)} 112)">${tag.svg}</g>` +
     `<rect x="0" y="${GROUND}" width="${W}" height="3" fill="${t.fg}"/>` +
     `<g fill="${t.mid}" class="ground">${specks}</g>` +
     `<g fill="${t.fg}">${obsSvg}</g>` +

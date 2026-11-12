@@ -4,12 +4,13 @@ export default {
   name: 'ASHOK',
   tagline: 'AI + COMPUTER VISION + RL',
 
-  // Tech stack, left to right. Keys come from scripts/data/icons*.json.
+  // Tech stack, in order. Keys come from scripts/data/icons*.json.
+  // 'fly' logos drift past in the air in the header; the dino runs under them.
   stack: [
     ['python', 'PYTHON'], ['pytorch', 'PYTORCH'], ['opencv', 'OPENCV'],
-    ['docker', 'DOCKER'], ['aws', 'AWS'], ['git', 'GIT'], ['linux', 'LINUX'],
-    ['ubuntu', 'UBUNTU'], ['react', 'REACT'], ['mongodb', 'MONGODB'],
-    ['mysql', 'MYSQL'], ['firebase', 'FIREBASE'], ['vercel', 'VERCEL'],
+    ['docker', 'DOCKER'], ['aws', 'AWS', 'fly'], ['git', 'GIT'], ['linux', 'LINUX'],
+    ['ubuntu', 'UBUNTU'], ['react', 'REACT', 'fly'], ['mongodb', 'MONGODB'],
+    ['mysql', 'MYSQL'], ['firebase', 'FIREBASE', 'fly'], ['vercel', 'VERCEL', 'fly'],
   ],
 
   socials: [
